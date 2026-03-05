@@ -49,8 +49,7 @@ namespace ApiCuidarte
 				{
 					policy.WithOrigins(
 						"http://localhost:3000",
-						"https://cuidarte-frontend.vercel.app",
-						"https://cuidarte-frontend-clientes.vercel.app",
+						"https://cuidarte-backoffice.vercel.app",
 						"https://cuidarte.com.uy",
 						"https://www.cuidarte.com.uy"
 					)
