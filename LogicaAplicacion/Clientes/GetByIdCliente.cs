@@ -17,6 +17,16 @@ namespace LogicaAplicacion.Clientes
 		public ClienteDto Ejecutar(int id)
 		{
 			ClienteDto cDto = ClienteMapper.ToDto(_context.GetById(id));
+			if (cDto.responsablePagoId != null && cDto.responsablePagoId != -1)
+			{
+				ClienteDto responsable =
+					ClienteMapper.ToDto(_context.GetById(cDto.responsablePagoId.Value));
+
+				cDto = cDto with
+				{
+					clienteResponsable = responsable
+				};
+			}
 			return cDto;
 		}
 

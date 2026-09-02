@@ -1,4 +1,5 @@
-﻿using LogicaAplicacion.Dtos.Clientes;
+﻿using System.Runtime.Remoting;
+using LogicaAplicacion.Dtos.Clientes;
 using LogicaAplicacion.Dtos.MapeosDto;
 using LogicaNegocio.Entidades;
 using LogicaNegocio.Excepciones;
@@ -25,6 +26,10 @@ namespace LogicaAplicacion.Clientes
 			if (obj == null)
 				throw new ArgumentNullException("El tipo de objeto está vacío");
 			Cliente c = ClienteMapper.FromDto(obj);
+			if (obj.responsablePagoId != null && obj.responsablePagoId != -1)
+			{
+				c.ClienteResponsablePago = _context.GetById(obj.responsablePagoId.Value);
+			}
 			TipoPlan plan = _contextTipoPlan.GetById(obj.TipoPlanId);
 			Cliente cCreado = _context.Add(c);
 			_context.CambiarPlan(cCreado.Id, plan);

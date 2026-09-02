@@ -16,7 +16,11 @@
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5285",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Jwt__SecretKey": "a8F!29Ks#LmQx7PzR4vNc8Yh@2WdEf91",
+        "API_KET": "your_api_key_here",
+        "DB_HOST": "localhost",
+        "DB_PORT": "5432"
       }
     },
     "https": {

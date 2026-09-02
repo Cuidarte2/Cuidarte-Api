@@ -1,10 +1,8 @@
 ﻿using Infraestructura.LogicaAccesoDatos.Excepciones;
 using LogicaAplicacion.Dtos;
 using LogicaAplicacion.Dtos.Clientes;
-using LogicaNegocio.Entidades;
 using LogicaNegocio.Excepciones;
 using LogicaNegocio.Excepciones.Cliente;
-using LogicaNegocio.Excepciones.Usuario;
 using LogicaNegocio.InterfacesServicios;
 using LogicaNegocio.InterfazServicios;
 using Microsoft.AspNetCore.Authorization;

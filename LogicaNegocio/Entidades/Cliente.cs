@@ -31,7 +31,13 @@ namespace LogicaNegocio.Entidades
 
 		[Required]
 		public string ResponsablePago { get; set; }
-
+		
+		public int? ResponsablePagoId { get; set; }
+		
+		public Cliente? ClienteResponsablePago { get; set; }
+		
+		public List<Cliente> ClientesACargo { get; set; } 
+		
 		[Required]
 		public string FormaPago { get; set; }
 
@@ -47,7 +53,7 @@ namespace LogicaNegocio.Entidades
 		public int? SuscripcionId { get; set; }
 		public bool Eliminado { get; set; }
 
-		public Cliente(int id, DateOnly fecha, NombreCompleto nombreCompleto, string ci,DateOnly fechaNacimiento, string direccion, Telefono telefono,Telefono celular, int plan,Email email,string ResponsablePago,string FormaPago,string Observaciones ,Suscripcion suscripcion)
+		public Cliente(int id, DateOnly fecha, NombreCompleto nombreCompleto, string ci,DateOnly fechaNacimiento, string direccion, Telefono telefono,Telefono celular, int plan,Email email,string responsablePago,int? responsablePagoId,string formaPago,string observaciones ,Suscripcion suscripcion)
 		{
 			Id = id;
 			fecha = Fecha;
@@ -60,13 +66,14 @@ namespace LogicaNegocio.Entidades
 			CI = ci;
 			Email = email;
 			Suscripcion = suscripcion;
-			this.ResponsablePago= ResponsablePago;
-			this.FormaPago= FormaPago;
-			this.Observaciones= Observaciones;
+			this.ResponsablePago= responsablePago;
+			this.ResponsablePagoId = responsablePagoId;
+			this.FormaPago= formaPago;
+			this.Observaciones= observaciones;
 			ValidarCedula(CI);
 		}
 
-		public Cliente(int id, DateOnly fecha, NombreCompleto nombreCompleto, string ci, DateOnly fechaNacimiento, string direccion, Telefono telefono,Telefono celular, int plan, Email email, string ResponsablePago, string FormaPago, string Observaciones)
+		public Cliente(int id, DateOnly fecha, NombreCompleto nombreCompleto, string ci, DateOnly fechaNacimiento, string direccion, Telefono telefono,Telefono celular, int plan, Email email, string responsablePago,int? responsablePagoId, string formaPago, string observaciones)
 		{
 			Id = id;
 			Fecha = fecha;
@@ -78,9 +85,10 @@ namespace LogicaNegocio.Entidades
 			TipoPlanId = plan;
 			CI = ci;
 			Email = email;
-			this.ResponsablePago = ResponsablePago;
-			this.FormaPago = FormaPago;
-			this.Observaciones = Observaciones;
+			this.ResponsablePago = responsablePago;
+			this.ResponsablePagoId = responsablePagoId;
+			this.FormaPago = formaPago;
+			this.Observaciones = observaciones;
 			ValidarCedula(CI);
 		}
 

@@ -25,7 +25,7 @@ using LogicaNegocio.ValueObject;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -100,19 +100,31 @@ namespace ApiCuidarte
 					Scheme = "bearer"
 				});
 
-				opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+				opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
 				{
-					{
-						new OpenApiSecurityScheme
-						{
-							Reference = new OpenApiReference
-							{
-								Type=ReferenceType.SecurityScheme,
-								Id="Bearer"
-							}
-						},
-						new string[]{}
-					}
+					Description = "JWT Authorization header usando el esquema Bearer. Ejemplo: \"Bearer {token}\"",
+					Name = "Authorization",
+					In = ParameterLocation.Header,
+					Type = SecuritySchemeType.Http,
+					Scheme = "bearer",
+					BearerFormat = "JWT"
+				});
+
+				opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+				{
+					Description = "JWT Authorization header usando el esquema Bearer. \r\n\r\n" +
+					              "Ingresá 'Bearer' [espacio] y luego tu token. \r\n\r\n" +
+					              "Ejemplo: \"Bearer 12345abcdef\"",
+					Name = "Authorization",
+					In = ParameterLocation.Header,
+					Type = SecuritySchemeType.Http,
+					Scheme = "bearer",
+					BearerFormat = "JWT"
+				});
+
+				opt.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+				{
+					[new OpenApiSecuritySchemeReference("Bearer", document)] = []
 				});
 			});
 

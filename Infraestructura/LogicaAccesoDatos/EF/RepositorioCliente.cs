@@ -75,11 +75,17 @@ namespace Infraestructura.LogicaAccesoDatos.EF
 				.ThenInclude(s => s.tipoServicio)
 				.Include(c => c.ServiciosDisponibles)
 				.Include(c => c.Suscripcion)
+				.Include(c => c.ClienteResponsablePago)
 				.FirstOrDefault(c => c.Id == id);
 
 			if (cliente == null)
 			{
 				throw new DomainException($"El cliente con ID {id} no encontrado.");
+			}
+
+			if (cliente.ResponsablePagoId == null)
+			{
+				
 			}
 			return cliente;
 		}
@@ -143,6 +149,11 @@ namespace Infraestructura.LogicaAccesoDatos.EF
 			return cliente;
 		}
 
-
+		private IEnumerable<Cliente> ClientesACargo (int idResponsable)
+		{
+			return _context.Clientes
+				.Where(c => c.ResponsablePagoId.Equals(idResponsable))
+				.Where(c => !c.Eliminado);
+		}
 	}
 }

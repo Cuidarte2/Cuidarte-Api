@@ -3,6 +3,7 @@ using System;
 using Infraestructura.LogicaAccesoDatos.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infraestructura.Migrations
 {
     [DbContext(typeof(CuidarteContext))]
-    partial class CuidarteContextModelSnapshot : ModelSnapshot
+    [Migration("20260819164551_NombreDeLaMigration")]
+    partial class NombreDeLaMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

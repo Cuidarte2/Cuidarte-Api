@@ -86,9 +86,15 @@ namespace Infraestructura.LogicaAccesoDatos.EF.Config
 			});
 
 			// Relaciones
+	
 			builder.HasOne(c => c.Plan)
 				.WithMany()
 				.HasForeignKey(c => c.TipoPlanId)
+				.OnDelete(DeleteBehavior.Restrict);
+			
+			builder.HasOne(c => c.ClienteResponsablePago)
+				.WithMany(c => c.ClientesACargo)
+				.HasForeignKey(c => c.ResponsablePagoId)
 				.OnDelete(DeleteBehavior.Restrict);
 
 			builder.HasOne(c => c.Suscripcion)

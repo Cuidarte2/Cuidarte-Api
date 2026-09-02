@@ -3,6 +3,7 @@ using System;
 using Infraestructura.LogicaAccesoDatos.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infraestructura.Migrations
 {
     [DbContext(typeof(CuidarteContext))]
-    partial class CuidarteContextModelSnapshot : ModelSnapshot
+    [Migration("20260803223859_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,9 +36,6 @@ namespace Infraestructura.Migrations
                     b.Property<string>("CI")
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
-
-                    b.Property<int?>("ClienteResponsablePagoId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Direccion")
                         .IsRequired()
@@ -66,9 +66,6 @@ namespace Infraestructura.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<int?>("ResponsablePagoId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("SuscripcionId")
                         .HasColumnType("integer");
 
@@ -76,8 +73,6 @@ namespace Infraestructura.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClienteResponsablePagoId");
 
                     b.HasIndex("SuscripcionId");
 
@@ -402,10 +397,6 @@ namespace Infraestructura.Migrations
 
             modelBuilder.Entity("LogicaNegocio.Entidades.Cliente", b =>
                 {
-                    b.HasOne("LogicaNegocio.Entidades.Cliente", "ClienteResponsablePago")
-                        .WithMany("ClientesACargo")
-                        .HasForeignKey("ClienteResponsablePagoId");
-
                     b.HasOne("LogicaNegocio.Entidades.Suscripcion", "Suscripcion")
                         .WithMany("Clientes")
                         .HasForeignKey("SuscripcionId")
@@ -501,8 +492,6 @@ namespace Infraestructura.Migrations
 
                     b.Navigation("Celular")
                         .IsRequired();
-
-                    b.Navigation("ClienteResponsablePago");
 
                     b.Navigation("Email")
                         .IsRequired();
@@ -740,8 +729,6 @@ namespace Infraestructura.Migrations
 
             modelBuilder.Entity("LogicaNegocio.Entidades.Cliente", b =>
                 {
-                    b.Navigation("ClientesACargo");
-
                     b.Navigation("ServiciosDisponibles");
 
                     b.Navigation("ServiciosExtras");
