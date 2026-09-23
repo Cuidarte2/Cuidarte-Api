@@ -29,6 +29,7 @@ using Microsoft.OpenApi;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using Infraestructura.Excel;
 using WebApi;
 
 namespace ApiCuidarte
@@ -159,6 +160,7 @@ namespace ApiCuidarte
 			builder.Services.AddScoped<IRepositorioSuscripcion, RepositorioSuscripcion>();
 			builder.Services.AddScoped<IRepositorioMensualidad, RepositorioMensualidad>();
 			builder.Services.AddScoped<IRepositorioFondoPortada, RepositorioFondoPortada>();
+			builder.Services.AddScoped<ILectorExcel, ClosedXmlExcelReader>();
 			// caso de uso -- Usuario --
 			builder.Services.AddScoped<IObtenerTodos<UsuarioDto>, GetAllUsuario>();
 			builder.Services.AddScoped<IAlta<UsuarioDto>, AltaUsuario>();
@@ -209,11 +211,12 @@ namespace ApiCuidarte
 			// caso de uso -- Mensualidad  --
 			builder.Services.AddScoped<IObtenerPorCliente<MensualidadDto>, GetAllMensualidad>();
 			builder.Services.AddScoped<IPagarMensualidades<SuscripcionDto>, PagarMensualidad>();
+			builder.Services.AddScoped<IImportarMensualidades,ImportarMensualidades>();
 
 			// caso de uso -- FondoPortada  --
 			builder.Services.AddScoped<IAlta<FondoPortadaDto>, AltaFondoPortada>();
 			builder.Services.AddScoped<IObtener<FondoPortadaDto>, GetFondoPortada>();
-
+			
 			var config = new ConfigurationBuilder()
 			.AddJsonFile("parametos.json", optional: true, reloadOnChange: true)
 			.Build();

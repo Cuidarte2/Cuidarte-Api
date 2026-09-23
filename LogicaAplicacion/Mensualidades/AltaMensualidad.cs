@@ -1,14 +1,8 @@
-﻿using LogicaAplicacion.Dtos.Clientes;
-using LogicaAplicacion.Dtos.MapeosDto;
+﻿using LogicaAplicacion.Dtos.MapeosDto;
 using LogicaAplicacion.Dtos.Suscripciones;
 using LogicaNegocio.Entidades;
 using LogicaNegocio.InterfacesRepocitorio;
 using LogicaNegocio.InterfazServicios;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LogicaAplicacion.Mensualidades
 {

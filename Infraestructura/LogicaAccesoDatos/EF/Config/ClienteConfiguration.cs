@@ -43,8 +43,7 @@ namespace Infraestructura.LogicaAccesoDatos.EF.Config
 
 			builder.Property(c => c.Eliminado)
 				.IsRequired();
-
-			// Value Object: NombreCompleto
+			
 			builder.OwnsOne(c => c.NombreCompleto, nomC =>
 			{
 				nomC.Property(n => n.Nombre)
@@ -57,8 +56,7 @@ namespace Infraestructura.LogicaAccesoDatos.EF.Config
 					.IsRequired()
 					.HasMaxLength(100);
 			});
-
-			// Value Object: Email
+			
 			builder.OwnsOne(c => c.Email, email =>
 			{
 				email.Property(e => e.Value)
@@ -66,8 +64,7 @@ namespace Infraestructura.LogicaAccesoDatos.EF.Config
 					.IsRequired()
 					.HasMaxLength(150);
 			});
-
-			// Value Object: Telefono
+			
 			builder.OwnsOne(c => c.Telefono, telefono =>
 			{
 				telefono.Property(t => t.Value)
@@ -75,8 +72,7 @@ namespace Infraestructura.LogicaAccesoDatos.EF.Config
 					.IsRequired()
 					.HasMaxLength(20);
 			});
-
-			// Value Object: Celular
+			
 			builder.OwnsOne(c => c.Celular, celular =>
 			{
 				celular.Property(cel => cel.Value)
@@ -95,6 +91,7 @@ namespace Infraestructura.LogicaAccesoDatos.EF.Config
 			builder.HasOne(c => c.ClienteResponsablePago)
 				.WithMany(c => c.ClientesACargo)
 				.HasForeignKey(c => c.ResponsablePagoId)
+				.IsRequired(false)
 				.OnDelete(DeleteBehavior.Restrict);
 
 			builder.HasOne(c => c.Suscripcion)
@@ -104,11 +101,13 @@ namespace Infraestructura.LogicaAccesoDatos.EF.Config
 
 			builder.HasMany(c => c.ServiciosDisponibles)
 				.WithOne()
-				.OnDelete(DeleteBehavior.Cascade);
+				.HasForeignKey("ClienteDisponibleId")
+				.OnDelete(DeleteBehavior.Restrict);
 
 			builder.HasMany(c => c.ServiciosExtras)
 				.WithOne()
-				.OnDelete(DeleteBehavior.Cascade);
+				.HasForeignKey("ClienteExtraId")
+				.OnDelete(DeleteBehavior.Restrict);
 		}
 	}
 }

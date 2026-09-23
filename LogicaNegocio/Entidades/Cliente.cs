@@ -36,7 +36,7 @@ namespace LogicaNegocio.Entidades
 		
 		public Cliente? ClienteResponsablePago { get; set; }
 		
-		public List<Cliente> ClientesACargo { get; set; } 
+		public List<Cliente>? ClientesACargo { get; set; } 
 		
 		[Required]
 		public string FormaPago { get; set; }

@@ -1,11 +1,12 @@
 using ClosedXML.Excel;
 using LogicaNegocio.InterfacesServicios;
+using LogicaNegocio.InterfacesServicios.Mensualidades;
 
 namespace Infraestructura.Excel;
 
 public class ClosedXmlExcelReader : ILectorExcel
 {
-    public List<Dictionary<string, object?>> Leer(Stream fileStream, string[] columnasEsperadas)
+    public List<Dictionary<string, object?>> Ejecutar(Stream fileStream, string[] columnasEsperadas)
     {
         using var workbook = new XLWorkbook(fileStream);
         var worksheet = workbook.Worksheets.First();
