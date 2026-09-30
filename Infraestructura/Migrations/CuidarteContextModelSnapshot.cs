@@ -58,10 +58,8 @@ namespace Infraestructura.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.Property<string>("ResponsablePago")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                    b.Property<int?>("ResponsablePagoId")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("ResponsablePagoId")
                         .HasColumnType("integer");
@@ -80,7 +78,10 @@ namespace Infraestructura.Migrations
 
                     b.HasIndex("TipoPlanId");
 
-                    b.ToTable("Clientes");
+                    b.ToTable("Clientes", t =>
+                        {
+                            t.HasCheckConstraint("CK_Cliente_NoAutoResponsable", "\"ResponsablePagoId\" IS NULL OR \"ResponsablePagoId\" <> \"Id\"");
+                        });
                 });
 
             modelBuilder.Entity("LogicaNegocio.Entidades.Empresa", b =>

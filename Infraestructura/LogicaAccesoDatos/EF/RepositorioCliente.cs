@@ -50,17 +50,19 @@ namespace Infraestructura.LogicaAccesoDatos.EF
 			Update(cliente);
 		}
 
-		public IEnumerable<Cliente> GetAll(int pagina, string? usuario)
-		{
-			return _context.Clientes.Include(c => c.Plan)
-			.Include(c => c.ServiciosDisponibles).ThenInclude(s => s.tipoServicio)
-			.Include(c => c.ServiciosExtras).ThenInclude(s => s.tipoServicio)
-			.Include(c => c.Suscripcion)
-			.Where(c => !c.Eliminado).Skip(pagina * Parametros.MaxItemsPaginado)
-		.Take(Parametros.MaxItemsPaginado).ToList();
-		}
+        public IEnumerable<Cliente> GetAll(int pagina, string? usuario)
+        {
+            return _context.Clientes
+                .Include(c => c.Plan)
+                .Include(c => c.Suscripcion)
+                .Where(c => !c.Eliminado)
+                .AsSplitQuery()
+                .Skip(pagina * Parametros.MaxItemsPaginado)
+                .Take(Parametros.MaxItemsPaginado)
+                .ToList();
+        }
 
-		public IEnumerable<Cliente> GetAll()
+        public IEnumerable<Cliente> GetAll()
 		{
 			return _context.Clientes.Include(c => c.Plan)
 			.Include(c => c.ServiciosDisponibles).ThenInclude(s => s.tipoServicio)
@@ -69,6 +71,7 @@ namespace Infraestructura.LogicaAccesoDatos.EF
 
 		public Cliente GetById(int id)
 		{
+<<<<<<< Updated upstream
 			Cliente cliente = _context.Clientes
 				.Include(c => c.Plan)
 				.ThenInclude(tp => tp.Servicios)
@@ -77,17 +80,32 @@ namespace Infraestructura.LogicaAccesoDatos.EF
 				.Include(c => c.Suscripcion)
 				.Include(c => c.ClienteResponsablePago)
 				.FirstOrDefault(c => c.Id == id);
+=======
+            Cliente? rtn= _context.Clientes
+                .Include(c => c.Plan)
+                .Include(c => c.Suscripcion)
+                .Include(c => c.ServiciosDisponibles).ThenInclude(s => s.tipoServicio)
+                .Include(c => c.ServiciosExtras).ThenInclude(s => s.tipoServicio)
+                .Include(c => c.ClienteResponsablePago)
+                .Include(c => c.ClientesACargo)
+                .AsSplitQuery()
+                .FirstOrDefault(c => c.Id == id && !c.Eliminado);
+>>>>>>> Stashed changes
 
-			if (cliente == null)
+			if(rtn == null)
 			{
-				throw new DomainException($"El cliente con ID {id} no encontrado.");
+				throw new DomainException($"Cliente con ID {id} no encontrado.");
 			}
+<<<<<<< Updated upstream
 
 			if (cliente.ResponsablePagoId == null)
 			{
 				
 			}
 			return cliente;
+=======
+			return rtn;
+>>>>>>> Stashed changes
 		}
 
 		public IEnumerable<Cliente> GetByTexto(string texto, string? usuario)
@@ -110,8 +128,7 @@ namespace Infraestructura.LogicaAccesoDatos.EF
 					(!string.IsNullOrEmpty(c.Direccion) && c.Direccion.ToLower().Contains(texto)) ||
 					(!string.IsNullOrEmpty(c.FormaPago) && c.FormaPago.ToLower().Contains(texto)) ||
 					(!string.IsNullOrEmpty(c.Celular.Value) && c.Celular.Value.ToLower().Contains(texto)) ||
-					(!string.IsNullOrEmpty(c.Telefono.Value) && c.Telefono.Value.ToLower().Contains(texto)) ||
-					(!string.IsNullOrEmpty(c.ResponsablePago) && c.ResponsablePago.ToLower().Contains(texto))
+					(!string.IsNullOrEmpty(c.Telefono.Value) && c.Telefono.Value.ToLower().Contains(texto))
 				);
 
 			return query.ToList();

@@ -7,10 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+<<<<<<< Updated upstream
+=======
+    <PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
+>>>>>>> Stashed changes
     <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.19" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+<<<<<<< Updated upstream
     <PackageReference Include="Resend" Version="0.15.0" />
+=======
+    <PackageReference Include="Resend" Version="0.19.0" />
+>>>>>>> Stashed changes
   </ItemGroup>
 
   <ItemGroup>

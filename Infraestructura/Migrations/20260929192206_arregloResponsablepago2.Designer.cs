@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infraestructura.Migrations
 {
     [DbContext(typeof(CuidarteContext))]
-    [Migration("20251223181734_cambiostareasfecha")]
-    partial class cambiostareasfecha
+    [Migration("20260929192206_arregloResponsablepago2")]
+    partial class arregloResponsablepago2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,10 +61,8 @@ namespace Infraestructura.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.Property<string>("ResponsablePago")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                    b.Property<int?>("ResponsablePagoId")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("SuscripcionId")
                         .HasColumnType("integer");
@@ -74,11 +72,16 @@ namespace Infraestructura.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ResponsablePagoId");
+
                     b.HasIndex("SuscripcionId");
 
                     b.HasIndex("TipoPlanId");
 
-                    b.ToTable("Clientes");
+                    b.ToTable("Clientes", t =>
+                        {
+                            t.HasCheckConstraint("CK_Cliente_NoAutoResponsable", "\"ResponsablePagoId\" IS NULL OR \"ResponsablePagoId\" <> \"Id\"");
+                        });
                 });
 
             modelBuilder.Entity("LogicaNegocio.Entidades.Empresa", b =>
@@ -155,6 +158,9 @@ namespace Infraestructura.Migrations
                         .HasColumnType("date");
 
                     b.Property<decimal>("Precio")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("PrecioProximaMensualidad")
                         .HasColumnType("numeric");
 
                     b.Property<int>("SubscriptionId")
@@ -394,6 +400,11 @@ namespace Infraestructura.Migrations
 
             modelBuilder.Entity("LogicaNegocio.Entidades.Cliente", b =>
                 {
+                    b.HasOne("LogicaNegocio.Entidades.Cliente", "ClienteResponsablePago")
+                        .WithMany("ClientesACargo")
+                        .HasForeignKey("ResponsablePagoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("LogicaNegocio.Entidades.Suscripcion", "Suscripcion")
                         .WithMany("Clientes")
                         .HasForeignKey("SuscripcionId")
@@ -489,6 +500,8 @@ namespace Infraestructura.Migrations
 
                     b.Navigation("Celular")
                         .IsRequired();
+
+                    b.Navigation("ClienteResponsablePago");
 
                     b.Navigation("Email")
                         .IsRequired();
@@ -726,6 +739,8 @@ namespace Infraestructura.Migrations
 
             modelBuilder.Entity("LogicaNegocio.Entidades.Cliente", b =>
                 {
+                    b.Navigation("ClientesACargo");
+
                     b.Navigation("ServiciosDisponibles");
 
                     b.Navigation("ServiciosExtras");

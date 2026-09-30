@@ -30,6 +30,7 @@ namespace LogicaNegocio.Entidades
 		public Telefono Celular { get; set; }
 
 		[Required]
+<<<<<<< Updated upstream
 		public string ResponsablePago { get; set; }
 		
 		public int? ResponsablePagoId { get; set; }
@@ -39,6 +40,15 @@ namespace LogicaNegocio.Entidades
 		public List<Cliente>? ClientesACargo { get; set; } 
 		
 		[Required]
+=======
+		public int? ResponsablePagoId { get; set; }
+
+        public Cliente? ClienteResponsablePago { get; set; }
+
+        public ICollection<Cliente> ClientesACargo { get; set; } = new List<Cliente>();
+
+        [Required]
+>>>>>>> Stashed changes
 		public string FormaPago { get; set; }
 
 		[Required]
@@ -53,7 +63,11 @@ namespace LogicaNegocio.Entidades
 		public int? SuscripcionId { get; set; }
 		public bool Eliminado { get; set; }
 
+<<<<<<< Updated upstream
 		public Cliente(int id, DateOnly fecha, NombreCompleto nombreCompleto, string ci,DateOnly fechaNacimiento, string direccion, Telefono telefono,Telefono celular, int plan,Email email,string responsablePago,int? responsablePagoId,string formaPago,string observaciones ,Suscripcion suscripcion)
+=======
+		public Cliente(int id, DateOnly fecha, NombreCompleto nombreCompleto, string ci,DateOnly fechaNacimiento, string direccion, Telefono telefono,Telefono celular, int plan,Email email,int? ResponsablePago,string FormaPago,string Observaciones ,Suscripcion suscripcion)
+>>>>>>> Stashed changes
 		{
 			Id = id;
 			fecha = Fecha;
@@ -66,6 +80,7 @@ namespace LogicaNegocio.Entidades
 			CI = ci;
 			Email = email;
 			Suscripcion = suscripcion;
+<<<<<<< Updated upstream
 			this.ResponsablePago= responsablePago;
 			this.ResponsablePagoId = responsablePagoId;
 			this.FormaPago= formaPago;
@@ -74,6 +89,15 @@ namespace LogicaNegocio.Entidades
 		}
 
 		public Cliente(int id, DateOnly fecha, NombreCompleto nombreCompleto, string ci, DateOnly fechaNacimiento, string direccion, Telefono telefono,Telefono celular, int plan, Email email, string responsablePago,int? responsablePagoId, string formaPago, string observaciones)
+=======
+			this.ResponsablePagoId= ResponsablePago;
+			this.FormaPago= FormaPago;
+			this.Observaciones= Observaciones;
+			ValidarCedula(CI);
+		}
+
+		public Cliente(int id, DateOnly fecha, NombreCompleto nombreCompleto, string ci, DateOnly fechaNacimiento, string direccion, Telefono telefono,Telefono celular, int plan, Email email, int? ResponsablePago, string FormaPago, string Observaciones)
+>>>>>>> Stashed changes
 		{
 			Id = id;
 			Fecha = fecha;
@@ -85,15 +109,21 @@ namespace LogicaNegocio.Entidades
 			TipoPlanId = plan;
 			CI = ci;
 			Email = email;
+<<<<<<< Updated upstream
 			this.ResponsablePago = responsablePago;
 			this.ResponsablePagoId = responsablePagoId;
 			this.FormaPago = formaPago;
 			this.Observaciones = observaciones;
+=======
+			this.ResponsablePagoId = ResponsablePago;
+			this.FormaPago = FormaPago;
+			this.Observaciones = Observaciones;
+>>>>>>> Stashed changes
 			ValidarCedula(CI);
 		}
 
 
-		public Cliente(int id,DateOnly fecha, NombreCompleto nombreCompleto, string ci, DateOnly fechaNacimiento, string direccion, Telefono telefono, Telefono celular,Email email, string ResponsablePago, string FormaPago, string Observaciones)
+		public Cliente(int id,DateOnly fecha, NombreCompleto nombreCompleto, string ci, DateOnly fechaNacimiento, string direccion, Telefono telefono, Telefono celular,Email email, int? ResponsablePago, string FormaPago, string Observaciones)
 		{
 			Id = id;
 			Fecha = fecha;
@@ -104,7 +134,7 @@ namespace LogicaNegocio.Entidades
 			Celular = celular;
 			CI = ci;
 			Email= email;
-			this.ResponsablePago = ResponsablePago;
+			this.ResponsablePagoId = ResponsablePago;
 			this.FormaPago = FormaPago;
 			this.Observaciones = Observaciones;
 			ValidarCedula(CI);
@@ -125,7 +155,7 @@ namespace LogicaNegocio.Entidades
 			if(c.Telefono != null) this.Telefono = c.Telefono;
 			if(c.Celular != null) this.Celular = c.Celular;
 			if ( c.Email != null) this.Email = c.Email;
-			if (c.ResponsablePago != null) this.ResponsablePago = c.ResponsablePago;
+			if (c.ResponsablePagoId != null) this.ResponsablePagoId = c.ResponsablePagoId;
 			if (c.FormaPago != null) this.FormaPago = c.FormaPago;
 			if (c.Observaciones != null) this.Observaciones = c.Observaciones;
 		}

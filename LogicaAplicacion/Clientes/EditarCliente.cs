@@ -40,7 +40,9 @@ namespace LogicaAplicacion.Clientes
 				throw new DomainException("El Id del cliente debe ser mayor a 0");
 			}
 			Cliente c = ClienteMapper.FromDto(obj);
-			TipoPlan tp= _contextTP.GetById(obj.TipoPlanId);
+            if (c.ResponsablePagoId == 0)
+                c.ResponsablePagoId = null;
+            TipoPlan tp= _contextTP.GetById(obj.TipoPlanId);
 			c.Plan = tp;
 			Suscripcion suscripcion;
 			if (tp.Destino.Equals(PlanDestino.Empresa))

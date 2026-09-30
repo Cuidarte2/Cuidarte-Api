@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infraestructura.Migrations
 {
     [DbContext(typeof(CuidarteContext))]
-    [Migration("20251113205857_cambiosCliente")]
-    partial class cambiosCliente
+    [Migration("20260925184758_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,9 @@ namespace Infraestructura.Migrations
                     b.Property<bool>("Eliminado")
                         .HasColumnType("boolean");
 
+                    b.Property<DateOnly>("Fecha")
+                        .HasColumnType("date");
+
                     b.Property<DateOnly>("FechaNacimiento")
                         .HasColumnType("date");
 
@@ -58,10 +61,8 @@ namespace Infraestructura.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
 
-                    b.Property<string>("ResponsablePago")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                    b.Property<int>("ResponsablePagoId")
+                        .HasColumnType("integer");
 
                     b.Property<int?>("SuscripcionId")
                         .HasColumnType("integer");
@@ -150,6 +151,12 @@ namespace Infraestructura.Migrations
 
                     b.Property<DateOnly>("PeriodoHasta")
                         .HasColumnType("date");
+
+                    b.Property<decimal>("Precio")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("PrecioProximaMensualidad")
+                        .HasColumnType("numeric");
 
                     b.Property<int>("SubscriptionId")
                         .HasColumnType("integer");
@@ -295,6 +302,9 @@ namespace Infraestructura.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Destino")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("Eliminado")
                         .HasColumnType("boolean");
 
@@ -308,6 +318,9 @@ namespace Infraestructura.Migrations
 
                     b.Property<decimal>("Precio")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PrecioConDescuentoNoUso")
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 

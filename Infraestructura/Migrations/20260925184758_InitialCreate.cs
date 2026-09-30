@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infraestructura.Migrations
 {
     /// <inheritdoc />
-    public partial class migrationInicial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,6 +34,8 @@ namespace Infraestructura.Migrations
                     Nombre = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     EmpresaId = table.Column<int>(type: "integer", nullable: true),
                     Precio = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    PrecioConDescuentoNoUso = table.Column<decimal>(type: "numeric", nullable: false),
+                    Destino = table.Column<int>(type: "integer", nullable: false),
                     Eliminado = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -81,17 +83,18 @@ namespace Infraestructura.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Nombre = table.Column<string>(type: "text", nullable: false),
-                    Apellido = table.Column<string>(type: "text", nullable: false),
-                    CI = table.Column<string>(type: "text", nullable: false),
+                    Fecha = table.Column<DateOnly>(type: "date", nullable: false),
+                    CI = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: true),
+                    Nombre = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Apellido = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     FechaNacimiento = table.Column<DateOnly>(type: "date", nullable: false),
-                    Direccion = table.Column<string>(type: "text", nullable: false),
-                    Telefono = table.Column<string>(type: "text", nullable: false),
-                    Celular = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    ResponsablePago = table.Column<string>(type: "text", nullable: false),
-                    FormaPago = table.Column<string>(type: "text", nullable: false),
-                    Observaciones = table.Column<string>(type: "text", nullable: false),
+                    Telefono = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    Email = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    Direccion = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Celular = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    ResponsablePagoId = table.Column<int>(type: "integer", nullable: false),
+                    FormaPago = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Observaciones = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     TipoPlanId = table.Column<int>(type: "integer", nullable: false),
                     SuscripcionId = table.Column<int>(type: "integer", nullable: true),
                     Eliminado = table.Column<bool>(type: "boolean", nullable: false)
@@ -104,7 +107,7 @@ namespace Infraestructura.Migrations
                         column: x => x.TipoPlanId,
                         principalTable: "Planes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -160,12 +163,14 @@ namespace Infraestructura.Migrations
                         name: "FK_Servicios_Clientes_ClienteId",
                         column: x => x.ClienteId,
                         principalTable: "Clientes",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Servicios_Clientes_ClienteId1",
                         column: x => x.ClienteId1,
                         principalTable: "Clientes",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Servicios_Planes_TipoPlanId",
                         column: x => x.TipoPlanId,
@@ -252,9 +257,11 @@ namespace Infraestructura.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     SubscriptionId = table.Column<int>(type: "integer", nullable: false),
+                    Precio = table.Column<decimal>(type: "numeric", nullable: false),
                     PeriodoDesde = table.Column<DateOnly>(type: "date", nullable: false),
                     PeriodoHasta = table.Column<DateOnly>(type: "date", nullable: false),
                     Estado = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    PrecioProximaMensualidad = table.Column<decimal>(type: "numeric", nullable: false),
                     Eliminado = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>

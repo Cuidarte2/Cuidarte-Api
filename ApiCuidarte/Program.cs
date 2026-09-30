@@ -24,6 +24,7 @@ using LogicaNegocio.InterfazServicios;
 using LogicaNegocio.ValueObject;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Reflection;
@@ -34,73 +35,81 @@ using WebApi;
 
 namespace ApiCuidarte
 {
-	public class Program
-	{
-		public static void Main(string[] args)
-		{
+    /// <summary>
+    /// Application entry point for the ApiCuidarte host.
+    /// </summary>
+    public class Program
+    {
+        /// <summary>
+        /// Main entry method that configures and runs the web application.
+        /// </summary>
+        /// <param name="args">Command-line arguments.</param>
+        public static void Main(string[] args)
+        {
 
 
-			var builder = WebApplication.CreateBuilder(args);
+            var builder = WebApplication.CreateBuilder(args);
 
 
 
-			builder.Services.AddCors(options =>
-			{
-				options.AddPolicy("PermitirFrontend", policy =>
-				{
-					policy.WithOrigins(
-						"http://localhost:3000",
-						"https://cuidarte-backoffice.vercel.app",
-						"https://cuidarte.com.uy",
-						"https://www.cuidarte.com.uy"
-					)
-					.AllowAnyHeader()
-					.AllowAnyMethod();
-				});
-			});
-			var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
-			builder.WebHost.UseUrls($"http://*:{port}");
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("PermitirFrontend", policy =>
+                {
+                    policy.WithOrigins(
+                        "http://localhost:3000",
+                        "https://cuidarte-backoffice.vercel.app",
+                        "https://cuidarte.com.uy",
+                        "https://www.cuidarte.com.uy"
+                    )
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+                });
+            });
+            var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+            builder.WebHost.UseUrls($"http://*:{port}");
 
 
-			builder.Services.AddControllers();
-			builder.Services.AddEndpointsApiExplorer();
-			builder.Services.AddScoped<ManejadorJwt>();
-			builder.Services.Configure<EmailOptions>(
-				builder.Configuration.GetSection("Email")
-			);
-			builder.Services.AddControllers().AddJsonOptions(
-				option =>
-				option.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
-				);
-			builder.Services.AddSwaggerGen(opt =>
-			{
-				opt.SwaggerDoc(
-					"v1", new OpenApiInfo
-					{
-						Title = "ApiCuidarte",
-						Version = "v1",
-						Description = "RestApi",
-					});
+            builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddScoped<ManejadorJwt>();
+            builder.Services.Configure<EmailOptions>(
+                builder.Configuration.GetSection("Email")
+            );
+            builder.Services.AddControllers().AddJsonOptions(
+                option =>
+                option.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
+                );
+            builder.Services.AddSwaggerGen(opt =>
+            {
+                opt.SwaggerDoc(
+                    "v1", new OpenApiInfo
+                    {
+                        Title = "ApiCuidarte",
+                        Version = "v1",
+                        Description = "RestApi",
+                    });
 
-				var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-				var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-				if (File.Exists(xmlPath))
-				{
-					opt.IncludeXmlComments(xmlPath);
-				}
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                if (File.Exists(xmlPath))
+                {
+                    opt.IncludeXmlComments(xmlPath);
+                }
 
-				opt.IncludeXmlComments(xmlPath);
+                opt.IncludeXmlComments(xmlPath);
 
-				opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-				{
-					In = ParameterLocation.Header,
-					Description = "Coloque el token JWT",
-					Name = "Authorization",
-					Type = SecuritySchemeType.Http,
-					BearerFormat = "JWT",
-					Scheme = "bearer"
-				});
+                opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Coloque el token JWT",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "bearer"
+                });
 
+<<<<<<< Updated upstream
 				opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
 				{
 					Description = "JWT Authorization header usando el esquema Bearer. Ejemplo: \"Bearer {token}\"",
@@ -128,29 +137,40 @@ namespace ApiCuidarte
 					[new OpenApiSecuritySchemeReference("Bearer", document)] = []
 				});
 			});
+=======
+                opt.AddSecurityRequirement(doc => new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecuritySchemeReference("Bearer"),
+                        new List<string>()
+                    }
+                });
+            });
+>>>>>>> Stashed changes
 
-			var claveSecreta = builder.Configuration["Jwt:SecretKey"]
-				?? throw new Exception("JWT SecretKey no configurada");
-			builder.Services.AddAuthentication(aut =>
-			{
-				aut.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-				aut.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-			})
-			.AddJwtBearer(aut =>
-			{
-				aut.RequireHttpsMetadata = false;
-				aut.SaveToken = true;
-				aut.TokenValidationParameters = new TokenValidationParameters
-				{
-					ValidateIssuerSigningKey = true,
-					IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(claveSecreta)),
-					ValidateIssuer = false,
-					ValidateAudience = false
-				};
-			});
+            var claveSecreta = builder.Configuration["Jwt:SecretKey"]
+                ?? throw new Exception("JWT SecretKey no configurada");
+            builder.Services.AddAuthentication(aut =>
+            {
+                aut.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                aut.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(aut =>
+            {
+                aut.RequireHttpsMetadata = false;
+                aut.SaveToken = true;
+                aut.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(claveSecreta)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
 
-			//Repositorios
+            //Repositorios
 
+<<<<<<< Updated upstream
 			builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuario>();
 			builder.Services.AddScoped<IRepositorioTipoServicio, RepositorioTipoServicio>();
 			builder.Services.AddScoped<IRepositorioTipoPlan, RepositorioTipoPlan>();
@@ -176,38 +196,65 @@ namespace ApiCuidarte
 			builder.Services.AddScoped<IObtener<TipoServicio>, GetByIdTipoServicio>();
 			builder.Services.AddScoped<IEditar<TipoServicio>, EditarTipoServicio>();
 			builder.Services.AddScoped<IEliminar<TipoServicio>, EliminarTipoServicio>();
+=======
+            builder.Services.AddScoped<IRepositorioUsuario, RepositorioUsuario>();
+            builder.Services.AddScoped<IRepositorioTipoServicio, RepositorioTipoServicio>();
+            builder.Services.AddScoped<IRepositorioTipoPlan, RepositorioTipoPlan>();
+            builder.Services.AddScoped<IRepositorioCliente, RepositorioCliente>();
+            builder.Services.AddScoped<IRepositorioTarea, RepositorioTarea>();
+            builder.Services.AddScoped<IRepositorioEmpresa, RepositorioEmpresa>();
+            builder.Services.AddScoped<IRepositorioSuscripcion, RepositorioSuscripcion>();
+            builder.Services.AddScoped<IRepositorioMensualidad, RepositorioMensualidad>();
+            builder.Services.AddScoped<IRepositorioFondoPortada, RepositorioFondoPortada>();
+            // caso de uso -- Usuario --
+            builder.Services.AddScoped<IObtenerTodos<UsuarioDto>, GetAllUsuario>();
+            builder.Services.AddScoped<IAlta<UsuarioDto>, AltaUsuario>();
+            builder.Services.AddScoped<IObtener<UsuarioDto>, GetByIdUsuario>();
+            builder.Services.AddScoped<IEditar<UsuarioDto>, EditarUsuario>();
+            builder.Services.AddScoped<IEliminar<UsuarioDto>, EliminarUsuario>();
+            builder.Services.AddScoped<ILogin<UsuarioDto>, LoginUsuario>();
+            builder.Services.AddScoped<IObtenerPorTexto<UsuarioDto>, ObtenerPorTextoUsuario>();
+            builder.Services.AddScoped<IObtenerHorasDelMes, ObtenerHorasDelMes>();
+            // caso de uso -- TipoServicio --
+            builder.Services.AddScoped<IObtenerTodos<TipoServicio>, GetAllTipoServicio>();
+            builder.Services.AddScoped<IAlta<TipoServicio>, AltaTipoServicio>();
+            builder.Services.AddScoped<IObtener<TipoServicio>, GetByIdTipoServicio>();
+            builder.Services.AddScoped<IEditar<TipoServicio>, EditarTipoServicio>();
+            builder.Services.AddScoped<IEliminar<TipoServicio>, EliminarTipoServicio>();
+>>>>>>> Stashed changes
 
-			// caso de uso -- TipoPlan --
-			builder.Services.AddScoped<IObtenerTodos<TipoPlanDto>, GetAllTipoPlan>();
-			builder.Services.AddScoped<IAlta<TipoPlanDto>, AltaTipoPlan>();
-			builder.Services.AddScoped<IObtener<TipoPlanDto>, GetByIdTipoPlan>();
-			builder.Services.AddScoped<IEditar<TipoPlanDto>, EditarTipoPlan>();
-			builder.Services.AddScoped<IEliminar<TipoPlanDto>, EliminarTipoPlan>();
+            // caso de uso -- TipoPlan --
+            builder.Services.AddScoped<IObtenerTodos<TipoPlanDto>, GetAllTipoPlan>();
+            builder.Services.AddScoped<IAlta<TipoPlanDto>, AltaTipoPlan>();
+            builder.Services.AddScoped<IObtener<TipoPlanDto>, GetByIdTipoPlan>();
+            builder.Services.AddScoped<IEditar<TipoPlanDto>, EditarTipoPlan>();
+            builder.Services.AddScoped<IEliminar<TipoPlanDto>, EliminarTipoPlan>();
 
-			// caso de uso -- Clientes --
-			builder.Services.AddScoped<IObtenerPaginado<PaginadoResultado<ClienteDto>>, GetAllCliente>();
-			builder.Services.AddScoped<IAlta<ClienteDto>, AltaCliente>();
-			builder.Services.AddScoped<IObtener<ClienteDto>, GetByIdCliente>();
-			builder.Services.AddScoped<IEditar<ClienteDto>, EditarCliente>();
-			builder.Services.AddScoped<IEliminar<ClienteDto>, EliminarCliente>();
-			builder.Services.AddScoped<IObtenerPorTexto<ClienteDto>, GetByTextoCliente>();
-			builder.Services.AddScoped<IFormularioNuevoCliente<ClienteFormularioDto>, FormularioNuevoCliente>();
+            // caso de uso -- Clientes --
+            builder.Services.AddScoped<IObtenerPaginado<PaginadoResultado<ClienteDto>>, GetAllCliente>();
+            builder.Services.AddScoped<IAlta<ClienteDto>, AltaCliente>();
+            builder.Services.AddScoped<IObtener<ClienteDto>, GetByIdCliente>();
+            builder.Services.AddScoped<IEditar<ClienteDto>, EditarCliente>();
+            builder.Services.AddScoped<IEliminar<ClienteDto>, EliminarCliente>();
+            builder.Services.AddScoped<IObtenerPorTexto<ClienteDto>, GetByTextoCliente>();
+            builder.Services.AddScoped<IFormularioNuevoCliente<ClienteFormularioDto>, FormularioNuevoCliente>();
 
-			// caso de uso -- Tareas --
-			builder.Services.AddScoped<IObtenerPaginado<PaginadoResultado<TareaDto>>, GetAllTarea>();
-			builder.Services.AddScoped<IAlta<TareaDto>, AltaTarea>();
-			builder.Services.AddScoped<IObtener<TareaDto>, GetByIdTarea>();
-			builder.Services.AddScoped<IEditar<TareaDto>, EditarTarea>();
-			builder.Services.AddScoped<IEliminar<TareaDto>, EliminarTarea>();
-			builder.Services.AddScoped<IObtenerPorTexto<TareaDto>, GetByTextoTarea>();
-			builder.Services.AddScoped<ICalificar<CalificacionDto>, CalificarTarea>();
+            // caso de uso -- Tareas --
+            builder.Services.AddScoped<IObtenerPaginado<PaginadoResultado<TareaDto>>, GetAllTarea>();
+            builder.Services.AddScoped<IAlta<TareaDto>, AltaTarea>();
+            builder.Services.AddScoped<IObtener<TareaDto>, GetByIdTarea>();
+            builder.Services.AddScoped<IEditar<TareaDto>, EditarTarea>();
+            builder.Services.AddScoped<IEliminar<TareaDto>, EliminarTarea>();
+            builder.Services.AddScoped<IObtenerPorTexto<TareaDto>, GetByTextoTarea>();
+            builder.Services.AddScoped<ICalificar<CalificacionDto>, CalificarTarea>();
 
-			// caso de uso -- Empresa --
-			builder.Services.AddScoped<IObtenerTodos<EmpresaDto>, GetAllEmpresa>();
-			builder.Services.AddScoped<IAlta<EmpresaDto>, AltaEmpresa>();
-			builder.Services.AddScoped<IEditar<EmpresaDto>, EditarEmpresa>();
-			builder.Services.AddScoped<IEliminar<EmpresaDto>, EliminarEmpresa>();
+            // caso de uso -- Empresa --
+            builder.Services.AddScoped<IObtenerTodos<EmpresaDto>, GetAllEmpresa>();
+            builder.Services.AddScoped<IAlta<EmpresaDto>, AltaEmpresa>();
+            builder.Services.AddScoped<IEditar<EmpresaDto>, EditarEmpresa>();
+            builder.Services.AddScoped<IEliminar<EmpresaDto>, EliminarEmpresa>();
 
+<<<<<<< Updated upstream
 			// caso de uso -- Mensualidad  --
 			builder.Services.AddScoped<IObtenerPorCliente<MensualidadDto>, GetAllMensualidad>();
 			builder.Services.AddScoped<IPagarMensualidades<SuscripcionDto>, PagarMensualidad>();
@@ -222,43 +269,58 @@ namespace ApiCuidarte
 			.Build();
 			Parametros.MaxItemsPaginado = config.GetValue<int>("MaxItemsPaginado");
 			Parametros.TopeUnidades = config.GetValue<int>("TopeUnidades");
+=======
+            // caso de uso -- Mensualidad  --
+            builder.Services.AddScoped<IObtenerPorCliente<MensualidadDto>, GetAllMensualidad>();
+            builder.Services.AddScoped<IPagarMensualidades<SuscripcionDto>, PagarMensualidad>();
 
-			var connectionString = builder.Configuration.GetConnectionString("cuidarte");
+            // caso de uso -- FondoPortada  --
+            builder.Services.AddScoped<IAlta<FondoPortadaDto>, AltaFondoPortada>();
+            builder.Services.AddScoped<IObtener<FondoPortadaDto>, GetFondoPortada>();
 
-			builder.Services.AddDbContext<CuidarteContext>(options =>
-			options.UseNpgsql(
-			builder.Configuration.GetConnectionString("cuidarte")
-				)
-			);
-			var app = builder.Build();
+            var config = new ConfigurationBuilder()
+            .AddJsonFile("parametos.json", optional: true, reloadOnChange: true)
+            .Build();
+            Parametros.MaxItemsPaginado = config.GetValue<int>("MaxItemsPaginado");
+            Parametros.TopeUnidades = config.GetValue<int>("TopeUnidades");
+>>>>>>> Stashed changes
 
-			using (var scope = app.Services.CreateScope())
-			{
-				var db = scope.ServiceProvider.GetRequiredService<CuidarteContext>();
-				db.Database.Migrate();
-			}
+            var connectionString = builder.Configuration.GetConnectionString("cuidarte");
+
+            builder.Services.AddDbContext<CuidarteContext>(options =>
+            options.UseNpgsql(
+            builder.Configuration.GetConnectionString("cuidarte")
+                )
+            );
+            var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<CuidarteContext>();
+                db.Database.Migrate();
+            }
 
 
-			// Configure the HTTP request pipeline.
-			if (app.Environment.IsDevelopment())
-			{
-				app.UseSwagger();
-				app.UseSwaggerUI();
-			}
-		
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
-			app.UseMiddleware<ExceptionMiddleware>();
-			app.UseCors("PermitirFrontend");
 
-			app.UseHttpsRedirection();
+            app.UseMiddleware<ExceptionMiddleware>();
+            app.UseCors("PermitirFrontend");
 
-			app.UseAuthentication();
-			app.UseAuthorization();
+            app.UseHttpsRedirection();
 
-			app.MapControllers();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-			app.Run();
+            app.MapControllers();
 
-		}
-	}
+            app.Run();
+
+        }
+    }
 }

@@ -26,11 +26,17 @@ namespace LogicaAplicacion.Clientes
 			if (obj == null)
 				throw new ArgumentNullException("El tipo de objeto está vacío");
 			Cliente c = ClienteMapper.FromDto(obj);
+<<<<<<< Updated upstream
 			if (obj.responsablePagoId != null && obj.responsablePagoId != -1)
 			{
 				c.ClienteResponsablePago = _context.GetById(obj.responsablePagoId.Value);
 			}
 			TipoPlan plan = _contextTipoPlan.GetById(obj.TipoPlanId);
+=======
+			if (c.ResponsablePagoId == 0)
+				c.ResponsablePagoId = null;
+            TipoPlan plan = _contextTipoPlan.GetById(obj.TipoPlanId);
+>>>>>>> Stashed changes
 			Cliente cCreado = _context.Add(c);
 			_context.CambiarPlan(cCreado.Id, plan);
 			var suscripcion = new Suscripcion(null,cCreado, cCreado.Plan);

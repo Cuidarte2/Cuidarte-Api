@@ -36,12 +36,59 @@ namespace LogicaAplicacion.Dtos.MapeosDto
 			ClienteDto clienteDto;
 			if (cliente.Suscripcion != null)
 			{
+<<<<<<< Updated upstream
 			 clienteDto = new ClienteDto(cliente.Id, cliente.Fecha.ToDateTime(TimeOnly.MinValue),cliente.NombreCompleto.Nombre, cliente.NombreCompleto.Apellido,cliente.CI, cliente.Email.Value, cliente.FechaNacimiento.ToDateTime(TimeOnly.MinValue), cliente.Direccion, cliente.Telefono.Value,cliente.Celular.Value ,cliente.ResponsablePago,cliente.ResponsablePagoId,null ,cliente.FormaPago, cliente.Observaciones, cliente.TipoPlanId,SuscripcionMapper.ToDto(cliente.Suscripcion), ServicioMapper.ToListaDto(cliente.ServiciosDisponibles));
 			}
 			else
 			{
 				clienteDto = new ClienteDto(cliente.Id, cliente.Fecha.ToDateTime(TimeOnly.MinValue),  cliente.NombreCompleto.Nombre, cliente.NombreCompleto.Apellido, cliente.CI, cliente.Email.Value, cliente.FechaNacimiento.ToDateTime(TimeOnly.MinValue), cliente.Direccion, cliente.Telefono.Value, cliente.Celular.Value, cliente.ResponsablePago,cliente.ResponsablePagoId,null, cliente.FormaPago, cliente.Observaciones, cliente.TipoPlanId,null, ServicioMapper.ToListaDto(cliente.ServiciosDisponibles));
+=======
+			 clienteDto = new ClienteDto(
+                cliente.Id,
+                cliente.Fecha.ToDateTime(TimeOnly.MinValue),
+                cliente.NombreCompleto.Nombre,
+                cliente.NombreCompleto.Apellido,
+                cliente.CI,
+                cliente.Email.Value,
+                cliente.FechaNacimiento.ToDateTime(TimeOnly.MinValue),
+                cliente.Direccion,
+                cliente.Telefono.Value,
+                cliente.Celular.Value,
+                cliente.ResponsablePagoId,
+                ClienteResumenMapper.ToDto(cliente.ClienteResponsablePago),                  
+                ClienteResumenMapper.ToListaDto(cliente.ClientesACargo),                     
+                cliente.FormaPago,
+                cliente.Observaciones,
+                cliente.TipoPlanId,
+                SuscripcionMapper.ToDto(cliente.Suscripcion),
+                ServicioMapper.ToListaDto(cliente.ServiciosDisponibles)
+            );
 			}
+			else
+			{
+				clienteDto = new ClienteDto(
+            cliente.Id,
+            cliente.Fecha.ToDateTime(TimeOnly.MinValue),
+            cliente.NombreCompleto.Nombre,
+            cliente.NombreCompleto.Apellido,
+            cliente.CI,
+            cliente.Email.Value,
+            cliente.FechaNacimiento.ToDateTime(TimeOnly.MinValue),
+            cliente.Direccion,
+            cliente.Telefono.Value,
+            cliente.Celular.Value,
+            cliente.ResponsablePagoId,
+            ClienteResumenMapper.ToDto(cliente.ClienteResponsablePago),                     
+            ClienteResumenMapper.ToListaDto(cliente.ClientesACargo),                        
+            cliente.FormaPago,
+            cliente.Observaciones,
+            cliente.TipoPlanId,
+            null,
+            ServicioMapper.ToListaDto(cliente.ServiciosDisponibles)
+        );
+>>>>>>> Stashed changes
+			}
+
 				return clienteDto;
 		}
 
